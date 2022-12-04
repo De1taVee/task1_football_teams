@@ -120,9 +120,6 @@ class Main {
                             "  ${bigscore.elementAt(i).team2score}"
                 )
             }
-
-
-
         }
     }
 }
