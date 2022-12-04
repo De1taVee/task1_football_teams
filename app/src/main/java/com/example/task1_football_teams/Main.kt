@@ -52,7 +52,7 @@ class Main {
             )
 
             //Вводим созданные матчи в массив
-            val matches = arrayOf(
+            var matches: Array<MatchResult?> = arrayOf(
                 Zenit_Spartak,
                 Zenit_CSKA,
                 Krasnodar_Zenit,
@@ -68,36 +68,50 @@ class Main {
 
             //Вывод элементов массива
             println("\nВывод элементов массива")
-            for (i in 0..9) {
-                println("Match ${matches[i].name}, result: ${matches[i].team1score}  ${matches[i].team2score}")
+            for (i in 0 until matches.size) {
+                println("Match ${matches[i]?.name}, result: ${matches[i]?.team1score}  ${matches[i]?.team2score}")
             }
 
+            println("\nИзменим значение матча Rotor_Krasnodar")
+            Rotor_Krasnodar.setMatchScore(3,2)
+            println("Match ${Rotor_Krasnodar.name}, result: ${Rotor_Krasnodar.team1score}  ${Rotor_Krasnodar.team2score}")
+
             //Удаляем элемент из массива если он соответствует условию: у команд равный счет
-            for (i in 0..9) {
-                if (matches[i].scoreDifference() == 0) {
-                    matches[i] == null
+            for (i in 0 until matches.size) {
+                if (matches[i]!!.scoreDifference() == 0) {
+
+                    matches[i] = null
                 }
             }
 
+
+
             println("\nВывод элементов массива после удаления команд с равными очками")
-            for (i in 0..9) {
-                println("Match ${matches[i].name}, result: ${matches[i].team1score}  ${matches[i].team2score}")
+            loop@for (i in 0 until matches.size) {
+                if(matches[i]==null)
+                    continue@loop
+                println("Match ${matches[i]!!.name}, result: ${matches[i]!!.team1score}  ${matches[i]!!.team2score}")
             }
 
             //Сначала ищем значение с наибольшей разницей, затем добавляем записи с такой разницей в Set
             val bigscore: MutableSet<MatchResult> = HashSet()
             var temp = 0
-            for (i in 0..9) {
-                if (temp < matches[i].scoreDifference())
-                    temp = matches[i].scoreDifference()
+            loop2@for (i in 0 until matches.size) {
+                if(matches[i]==null)
+                    continue@loop2
+
+                if (temp < matches[i]!!.scoreDifference())
+                    temp = matches[i]!!.scoreDifference()
             }
 
-            for (i in 0..9) {
-                if (matches[i].scoreDifference() == temp)
-                    bigscore.add(matches[i])
+            loop3@for (i in 0 until matches.size) {
+                if(matches[i]==null)
+                    continue@loop3
+                if (matches[i]!!.scoreDifference() == temp)
+                    bigscore.add(matches[i]!!)
             }
 
-            println("\nВывод элементов массива после удаления команд с наибольшим разрывом в очках")
+            println("\nВывод команд с наибольшим разрывом в очках")
             for (i in 0 until bigscore.size) {
                 println(
                     "Match with biggest score difference:" +
@@ -106,6 +120,8 @@ class Main {
                             "  ${bigscore.elementAt(i).team2score}"
                 )
             }
+
+
 
         }
     }
